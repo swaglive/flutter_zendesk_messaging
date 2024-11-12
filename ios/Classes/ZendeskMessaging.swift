@@ -20,7 +20,7 @@ public class ZendeskMessaging: NSObject {
         self.channel = channel
     }
     
-    func initialize(channelKey: String) {
+    func initialize(channelKey: String, flutterResult: @escaping FlutterResult) {
         print("\(self.TAG) - Channel Key - \(channelKey)\n")
         Zendesk.initialize(withChannelKey: channelKey, messagingFactory: DefaultMessagingFactory()) { result in
             DispatchQueue.main.async {
@@ -33,6 +33,7 @@ public class ZendeskMessaging: NSObject {
                     print("\(self.TAG) - initialize success")
                     self.channel?.invokeMethod(ZendeskMessaging.initializeSuccess, arguments: [:])
                 }
+                flutterResult(nil)
             }
         }
     }
@@ -81,7 +82,7 @@ public class ZendeskMessaging: NSObject {
         Zendesk.instance?.messaging?.clearConversationTags()
     }
     
-    func loginUser(jwt: String) {
+    func loginUser(jwt: String, flutterResult: @escaping FlutterResult) {
         Zendesk.instance?.loginUser(with: jwt) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -94,11 +95,12 @@ public class ZendeskMessaging: NSObject {
                     self.channel?.invokeMethod(ZendeskMessaging.loginFailure, arguments: ["error": nil])
                     break
                 }
+                flutterResult(nil)
             }
         }
     }
     
-    func logoutUser() {
+    func logoutUser(flutterResult: @escaping FlutterResult) {
         Zendesk.instance?.logoutUser { result in
             DispatchQueue.main.async {
                 switch result {
@@ -111,6 +113,7 @@ public class ZendeskMessaging: NSObject {
                     self.channel?.invokeMethod(ZendeskMessaging.logoutFailure, arguments: ["error": nil])
                     break
                 }
+                flutterResult(nil)
             }
         }
     }

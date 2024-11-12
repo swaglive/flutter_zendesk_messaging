@@ -36,7 +36,7 @@ public class SwiftZendeskMessagingPlugin: NSObject, FlutterPlugin {
                     return
                 }
                 let channelKey: String = (arguments?["channelKey"] ?? "") as! String
-                zendeskMessaging.initialize(channelKey: channelKey)
+                zendeskMessaging.initialize(channelKey: channelKey, flutterResult: result)
                 break;
             case "show":
                 if (!isInitialized) {
@@ -49,13 +49,13 @@ public class SwiftZendeskMessagingPlugin: NSObject, FlutterPlugin {
                     print("\(TAG) - Messaging needs to be initialized first.\n")
                 }
                 let jwt: String = arguments?["jwt"] as! String
-                zendeskMessaging.loginUser(jwt: jwt)
+                zendeskMessaging.loginUser(jwt: jwt, flutterResult: result)
                 break
             case "logoutUser":
                 if (!isInitialized) {
                     print("\(TAG) - Messaging needs to be initialized first.\n")
                 }
-                zendeskMessaging.logoutUser()
+                zendeskMessaging.logoutUser(flutterResult: result)
                 break
             case "getUnreadMessageCount":
                 if (!isInitialized) {
